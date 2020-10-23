@@ -4431,7 +4431,7 @@ namespace ColMusCa
             get
             {
                 var version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
-                string appVersion = $"{version.Major}.{version.Minor}";
+                string appVersion = $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
                 return appVersion;
             }
         }
