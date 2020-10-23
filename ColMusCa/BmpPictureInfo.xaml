@@ -1,0 +1,31 @@
+﻿<Window x:Class="ColMusCa.BmpPictureInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ColMusCa"
+        mc:Ignorable="d"
+        Title="BmpPictureInfo" Height="753.333" Width="960">
+    <Grid x:Name="PaletteGrid" d:LayoutOverrides="LeftPosition, RightPosition, TopPosition, BottomPosition">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="532*"/>
+            <RowDefinition Height="160"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="180*"/>
+            <ColumnDefinition Width="180"/>
+        </Grid.ColumnDefinitions>
+        <Menu x:Name="Menu1" Margin="0" Grid.ColumnSpan="4" Height="20">
+            <MenuItem x:Name="MenuFile" Header="Datei">
+                <MenuItem x:Name="MenuOpen" Header="Öffnen" Click="MenuOpenClick" />
+                <Separator />
+                <MenuItem x:Name="MenuExit" Header="Beenden" Width="209.383" HorizontalAlignment="Left" Margin="0" Click="MenuExitClick" />
+            </MenuItem>
+        </Menu>
+        <Image x:Name="ImageColor" Margin="0" Stretch="Fill" Grid.ColumnSpan="4" Grid.Row="1" />
+        <Button x:Name="BtnTryCreateBmpPictureInfos" Content="Info Dateien erstellen" Margin="0,10,0,0" Click="BtnStartColorClick" Grid.Row="2" Width="140" Height="40" VerticalAlignment="Top" ContextMenuClosing="BtnStartColorClick" />
+    </Grid>
+</Window>

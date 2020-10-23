@@ -1,0 +1,345 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ColMusCa"
+        xmlns:Properties="clr-namespace:ColMusCa.Properties" xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="WindowMain" x:Class="ColMusCa.MainWindow"
+        mc:Ignorable="d"
+        Title="ColMusCa" WindowState="Maximized" Closing="WindowMainClosing" MinWidth="980" MinHeight="540" ResizeMode="CanResizeWithGrip" SizeToContent="WidthAndHeight" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Top">
+    <Window.Resources>
+        <ZoomPercentageConverter x:Key="ZoomPercentageConverter" />
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="C"
+              Modifiers="Alt"
+              Command="ApplicationCommands.Close" />
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close"
+                  Executed="CloseCmdExecuted"
+                  CanExecute="CloseCmdCanExecute" />
+    </Window.CommandBindings>
+    <Grid Margin="0" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="154"/>
+            <RowDefinition Height="151"/>
+            <RowDefinition Height="300"/>
+            <RowDefinition/>
+            <RowDefinition Height="15"/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="502"/>
+            <ColumnDefinition Width="136"/>
+            <ColumnDefinition Width="196"/>
+            <ColumnDefinition Width="570*"/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="250"/>
+        </Grid.ColumnDefinitions>
+        <Menu x:Name="Menu1" RenderTransformOrigin="0.69,1.028" Margin="0" Grid.ColumnSpan="6" VerticalContentAlignment="Center">
+            <MenuItem x:Name="MenuItemProject" Header="_Projekt" VerticalContentAlignment="Center" Padding="6,5,6,0">
+                <MenuItem x:Name="MenuItemProjectNew" Header="Neue Projektmappe..." InputGestureText="STRG+O" Click="ProjectNew" />
+                <MenuItem x:Name="MenueItemProjectSave" Header="Speichere Projektmappe" Click="ProjectSave" />
+                <MenuItem x:Name="MenueItemProjectOpen" Header="Projektmappe Öffen... " IsCheckable="True" Click="ProjectOpen" Width="376.36" />
+                <MenuItem x:Name="MenueItemExit1" Header="Programm b_eenden" Command="ApplicationCommands.Close" Click="ProgrammExit" />
+            </MenuItem>
+            <MenuItem x:Name="MenuItemDatei" Header="_Originalbild" Padding="6,5,6,0">
+                <MenuItem x:Name="MenuItemOpenFileOriginal" Header="Originalbild Öffnen..." Click="OpenFileOriginal" />
+                <MenuItem x:Name="MenueItemCloseFileOriginal" Header="Originalbild schließen" Click="CloseFileOriginal" Visibility="Hidden" />
+            </MenuItem>
+            <MenuItem x:Name="MenuItemExtras" Header="Extras" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="6,5,6,0">
+                <MenuItem x:Name="MenueOpenFilePalette" Header="Farbpaletten" Click="OpenFilePalette" />
+                <MenuItem x:Name="MenueCreateInfoFiles" Header="Bild.Bmp Infos" Click="MenueCreateInfoFilesClick" />
+                <MenuItem x:Name="MenueVersion" Header="Version" Click="MenueVersionClick" />
+            </MenuItem>
+        </Menu>
+        <Grid x:Name="GridUp" Grid.ColumnSpan="6" Grid.Row="1" Grid.RowSpan="2" Margin="0,0,5,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Label x:Name="LabelImitationSize" Margin="0" RenderTransformOrigin="0.215,0.577" Content="ImitationSize" Grid.Row="1" Grid.Column="2" />
+            <Label x:Name="LabelImitationColors" Margin="0" RenderTransformOrigin="0.215,0.577" Content="ImitationColors" Grid.Row="1" Grid.Column="3" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Visibility="Hidden" />
+
+            <Label x:Name="LabelImitationName" Margin="0" RenderTransformOrigin="0.215,0.577" Content="ImitationName" Grid.Column="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+
+            <Label x:Name="LabelOriginalSize" Margin="0" RenderTransformOrigin="0.215,0.577" Content="OriginalSize" Grid.Row="1" />
+            <Label x:Name="LabelOriginalColors" Margin="0" RenderTransformOrigin="0.215,0.577" Content="OriginalColors" Grid.Column="1" Grid.Row="1" />
+            <Label x:Name="LabelOriginalName" Margin="0" RenderTransformOrigin="0.215,0.577" Content="OriginalName" ToolTip="{Binding Content, ElementName=LabelOriginalName}" Grid.RowSpan="2" />
+            <ProgressBar x:Name="ProgressBarThink" Margin="0,10,10,10" SmallChange="1" Value="{Binding ProgressBarThink, Mode=TwoWay}" Grid.RowSpan="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="4" />
+            <Label x:Name="LabelProgress" Margin="0" Content="{Binding Value, Converter={StaticResource ZoomPercentageConverter}, ElementName=ProgressBarThink, StringFormat=\{0:P0\}}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="2" Grid.Column="4" />
+            <Button x:Name="BtnCalculate" Content="Alles Berechnen" Margin="10" Click="BtnCalculateClick" Grid.Column="7" Grid.RowSpan="2" />
+            <Button x:Name="BtnInputsReset" Margin="10" Click="BtnInputsResetClick" Content="Eingaben zurücksetzen" Grid.Column="6" Grid.RowSpan="2" />
+            <Button x:Name="BtnCheckInputs" Content="Eingaben übernehmen" Margin="10" Click="BtnCheckInputsClick" Grid.Column="5" Grid.RowSpan="2" />
+
+        </Grid>
+        <Grid x:Name="GridPage" Margin="10" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120*"/>
+                <ColumnDefinition Width="120*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="30*"/>
+            </Grid.RowDefinitions>
+            <GroupBox x:Name="GroupBoxPage" Header="Seite 0 von 0" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.RowSpan="3" Grid.ColumnSpan="2" />
+            <Button x:Name="BtnNewPage" Content="Neue Seite" Margin="10" Click="BtnNewPageClick" Grid.Row="3" />
+            <Button x:Name="BtnDeletePage" Content="Lösche Seite " Margin="10" Click="BtnDeletePageClick" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.RowSpan="3" Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="2" />
+            <CheckBox x:Name="CheckboxPageCalculate" Content="Seite berechnen" Margin="10,10,5,5" VerticalContentAlignment="Center" IsChecked="True" RenderTransformOrigin="1.252,0.474" HorizontalContentAlignment="Center" HorizontalAlignment="Left" />
+            <CheckBox x:Name="CheckboxPageInfoData" Content="Info Dateien" Margin="5,10,10,5" VerticalContentAlignment="Center" IsChecked="True" RenderTransformOrigin="1.252,0.474" HorizontalContentAlignment="Center" Grid.Column="1" HorizontalAlignment="Left" Visibility="Hidden" />
+            <Button x:Name="BtnNextPage" Content="Nächste Seite" Margin="10" Click="BtnNextPageClick" Grid.Column="1" Grid.Row="1" />
+            <Button x:Name="BtnPreviousPage" Content="Vorherige Seite" Margin="10" Click="BtnPreviousPageClick" Grid.Row="1" />
+        </Grid>
+        <Grid x:Name="GridCalc" Grid.Column="5" Margin="0,10,10,10" Grid.Row="4" HorizontalAlignment="Right" Width="137.973">
+            <GroupBox x:Name="GroupBoxCalc" Header="Berechnung" Margin="0" VerticalContentAlignment="Bottom" />
+            <StackPanel x:Name="StackPanelCalcMode" Margin="10,20,10,10" Orientation="Vertical">
+                <RadioButton x:Name="RadioButtonFarbabstand" Content="Farbabstand LAB" HorizontalAlignment="Left" ForceCursor="True" IsChecked="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonFarbwert" Content="Farbwert HSV" HorizontalAlignment="Left" ForceCursor="True" IsChecked="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonHellwert" Content="Hellwert HSV" HorizontalAlignment="Left" ForceCursor="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonSaetigung" Content="Sätigung HSV" HorizontalAlignment="Left" ForceCursor="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+            </StackPanel>
+        </Grid>
+
+        <Image Margin="5" x:Name="ImageOriginalPicture" Grid.Row="2" Grid.RowSpan="3" Source="ImageOriginalBild.JPG" />
+        <Image x:Name="ImageImitationPicture" Margin="5,5,0,0" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="0" Width="0" />
+        <StackPanel x:Name="StackPanelPalette" Margin="5,10,5,0" Grid.Row="5" Grid.RowSpan="2" VerticalAlignment="Top" Height="505.532">
+            <StackPanel x:Name="StackPanelCalc" Margin="0" Orientation="Horizontal" VerticalAlignment="Top">
+                <Button x:Name="BtnCreateInfoOriginal" Content="Info Dateien Original" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="20,4.86,0,4.86" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnCreateInfoOriginalClick" Width="200" Visibility="Collapsed" />
+                <Button x:Name="BtnCreatePaletteOriginal" Content="Palette Original" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="40,4.86,20,4.86" HorizontalAlignment="Center" VerticalAlignment="Center" Click="BtnCreatePaletteOriginalClick" Width="200" />
+            </StackPanel>
+            <Image x:Name="ImagePalettePicture0" Stretch="Fill" VerticalAlignment="Top" Height="30" />
+            <StackPanel x:Name="StackPanelPalette0" Orientation="Horizontal" VerticalAlignment="Top">
+                <Label x:Name="LabelIndex0" Margin="0" RenderTransformOrigin="0.215,0.577" Content="Index 0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <Label x:Name="LabelTargetIndex0" Margin="5,0,0,0" RenderTransformOrigin="0.215,0.577" Content="Zielindex:" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="TextBoxTargetIndex0" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Text="0" Margin="0,5.86" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Width="20" />
+                <Button x:Name="BtnOpenPalette0" Content="Öffne..." Height="25.96" Click="BtnOpenPalettes0Click" RenderTransformOrigin="1.314,0.319" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" />
+                <Button x:Name="BtnClosePalette0" Content="Schließe" Height="25.96" Click="BtnClosePalettes0Click" RenderTransformOrigin="1.314,0.319" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,4.52,0,4.52" />
+                <Label x:Name="LabelPath0" Margin="5,1.86,0,1.86" RenderTransformOrigin="0.215,0.577" Content="Dateiname 0" VerticalContentAlignment="Center" VerticalAlignment="Center" Width="117.937" HorizontalAlignment="Left" />
+            </StackPanel>
+            <StackPanel x:Name="StackPanelParts0" Margin="0" Orientation="Horizontal" VerticalAlignment="Top">
+                <Label x:Name="LblCorrection0" RenderTransformOrigin="0.215,0.577" Content="0: Korr." Margin="0" ToolTip="Korrektur um den Farbanteil der Palette am Imitation Bild zu ändern. Dieser Wert wird in der Projectseite gespeichert." HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="textBoxCorrection0" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Text="0" Margin="0" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+                <Button x:Name="BtnCorrection0" Content="OK" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnCorrection0Click" />
+                <Label x:Name="LabeColorCount0" RenderTransformOrigin="0.215,0.577" Content="Farben" Margin="0" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="textBoxColorCount0" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <Button x:Name="BtnColors0" Content="OK" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnColors0Click" />
+                <Label x:Name="LblMinPerCent0" RenderTransformOrigin="0.215,0.577" Content="%" Margin="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="textBoxPerCent0" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" Height="20.939" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" IsEnabled="False" />
+                <Button x:Name="BtnMinPerCent0" Content="Data" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnMinPerCent0Click" />
+                <CheckBox x:Name="CheckboxPin0" Content="Pin" HorizontalAlignment="Left" Margin="8,7.606,0,7.466" VerticalContentAlignment="Center" RenderTransformOrigin="0.47,0.63" ToolTip="Gesperrt: Korrektur wird angepasst. Die Anzahl der Farben ändert sich nicht mehr!" VerticalAlignment="Center" />
+            </StackPanel>
+            <Image x:Name="ImagePalettePicture1" Stretch="Fill" VerticalAlignment="Top" Height="30" />
+            <StackPanel x:Name="StackPanelPalette1" Orientation="Horizontal" VerticalAlignment="Top">
+                <Label x:Name="LabelIndex1" Margin="0" RenderTransformOrigin="0.215,0.577" Content="Index 1" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <Label x:Name="LabelTargetIndex1" Margin="5,0,0,0" RenderTransformOrigin="0.215,0.577" Content="Zielindex:" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="TextBoxTargetIndex1" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Text="1" Margin="0,5.86" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Width="20" />
+                <Button x:Name="BtnOpenPalette1" Content="Öffne..." Height="25.96" Click="BtnOpenPalettes1Click" RenderTransformOrigin="1.314,0.319" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" />
+                <Button x:Name="BtnClosePalette1" Content="Schließe" Height="25.96" Click="BtnClosePalettes1Click" RenderTransformOrigin="1.314,0.319" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,4.52,0,4.52" />
+                <Label x:Name="LabelPath1" Margin="5,0,0,0" RenderTransformOrigin="0.215,0.577" Content="Dateiname 1" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel x:Name="StackPanelParts1" Margin="0" Orientation="Horizontal" VerticalAlignment="Top">
+                <Label x:Name="LblCorrection1" RenderTransformOrigin="0.215,0.577" Content="1: Korr." Margin="0" ToolTip="Korrektur um den Farbanteil der Palette am Imitation Bild zu ändern. Dieser WErt wird in der Projectseite gespeichert." VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center" />
+                <TextBox x:Name="textBoxCorrection1" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Button x:Name="BtnCorrection1" Content="OK" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnCorrection1Click" />
+                <Label x:Name="LabeColorCount1" RenderTransformOrigin="0.215,0.577" Content="Farben" Margin="0" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="textBoxColorCount1" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <Button x:Name="BtnColors1" Content="OK" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnColors1Click" />
+                <Label x:Name="LblMinPerCent1" RenderTransformOrigin="0.215,0.577" Content="%" Margin="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="textBoxPerCent1" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" Height="20.939" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" IsEnabled="False" />
+                <Button x:Name="BtnMinPerCent1" Content="Data" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnMinPerCent1Click" />
+                <CheckBox x:Name="CheckboxPin1" Content="Pin" HorizontalAlignment="Left" Margin="8,7.606,0,7.466" VerticalContentAlignment="Center" RenderTransformOrigin="0.47,0.63" ToolTip="Gesperrt: Korrektur wird angepasst. Die Anzahl der Farben ändert sich nicht mehr!" VerticalAlignment="Center" />
+            </StackPanel>
+            <Image x:Name="ImagePalettePicture2" Stretch="Fill" VerticalAlignment="Top" Height="30" />
+            <StackPanel x:Name="StackPanelPalette2" Orientation="Horizontal" VerticalAlignment="Top">
+                <Label x:Name="LabelIndex2" Margin="0" RenderTransformOrigin="0.215,0.577" Content="Index 2" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <Label x:Name="LabelTargetIndex2" Margin="5,0,0,0" RenderTransformOrigin="0.215,0.577" Content="Zielindex:" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="TextBoxTargetIndex2" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Text="2" Margin="0,5.86" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Width="20" />
+                <Button x:Name="BtnOpenPalette2" Content="Öffne..." Height="25.96" Click="BtnOpenPalettes2Click" RenderTransformOrigin="1.314,0.319" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" />
+                <Button x:Name="BtnClosePalette2" Content="Schließe" Height="25.96" Click="BtnClosePalettes2Click" RenderTransformOrigin="1.314,0.319" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,4.52,0,4.52" />
+                <Label x:Name="LabelPath2" Margin="5,0,0,0" RenderTransformOrigin="0.215,0.577" Content="Dateiname 2" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel x:Name="StackPanelParts2" Margin="0" Orientation="Horizontal" VerticalAlignment="Top">
+                <Label x:Name="LblCorrection2" RenderTransformOrigin="0.215,0.577" Content="2: Korr." Margin="0" ToolTip="Korrektur um den Farbanteil der Palette am Imitation Bild zu ändern. Dieser WErt wird in der Projectseite gespeichert." VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center" />
+                <TextBox x:Name="textBoxCorrection2" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Button x:Name="BtnCorrection2" Content="OK" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnCorrection2Click" ScrollViewer.HorizontalScrollBarVisibility="Visible" />
+                <Label x:Name="LabeColorCount2" RenderTransformOrigin="0.215,0.577" Content="Farben" Margin="0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                <TextBox x:Name="textBoxColorCount2" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <Button x:Name="BtnColors2" Content="OK" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnColors2Click" />
+                <Label x:Name="LblMinPerCent2" RenderTransformOrigin="0.215,0.577" Content="%" Margin="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="textBoxPerCent2" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" Height="20.939" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" IsEnabled="False" />
+                <Button x:Name="BtnMinPerCent2" Content="Data" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnMinPerCent2Click" />
+                <CheckBox x:Name="CheckboxPin2" Content="Pin" HorizontalAlignment="Left" Margin="8,7.606,0,7.466" VerticalContentAlignment="Center" RenderTransformOrigin="0.47,0.63" ToolTip="Gesperrt: Korrektur wird angepasst. Die Anzahl der Farben ändert sich nicht mehr!" VerticalAlignment="Center" />
+            </StackPanel>
+            <Image x:Name="ImagePalettePicture3" Stretch="Fill" VerticalAlignment="Top" Height="30" />
+            <StackPanel x:Name="StackPanelPalette3" Orientation="Horizontal" VerticalAlignment="Top">
+                <Label x:Name="LabelIndex3" Margin="0" RenderTransformOrigin="0.215,0.577" Content="Index 3" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <Label x:Name="LabelTargetIndex3" Margin="5,0,0,0" RenderTransformOrigin="0.215,0.577" Content="Zielindex:" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="TextBoxTargetIndex3" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Text="3" Margin="0,5.86" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Width="20" />
+                <Button x:Name="BtnOpenPalette3" Content="Öffne..." Height="25.96" Click="BtnOpenPalettes3Click" RenderTransformOrigin="1.314,0.319" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" />
+                <Button x:Name="BtnClosePalette3" Content="Schließe" Height="25.96" Click="BtnClosePalettes3Click" RenderTransformOrigin="1.314,0.319" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,4.52,0,4.52" />
+                <Label x:Name="LabelPath3" Margin="5,0,0,0" RenderTransformOrigin="0.215,0.577" Content="Dateiname 3" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel x:Name="StackPanelParts3" Margin="0" Orientation="Horizontal" VerticalAlignment="Top">
+                <Label x:Name="LblCorrection3" RenderTransformOrigin="0.215,0.577" Content="3: Korr." Margin="0" ToolTip="Korrektur um den Farbanteil der Palette am Imitation Bild zu ändern. Dieser WErt wird in der Projectseite gespeichert." VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center" />
+                <TextBox x:Name="textBoxCorrection3" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Button x:Name="BtnCorrection3" Content="OK" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnCorrection3Click" />
+                <Label x:Name="LabeColorCount3" RenderTransformOrigin="0.215,0.577" Content="Farben" Margin="0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                <TextBox x:Name="textBoxColorCount3" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <Button x:Name="BtnColors3" Content="OK" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnColors3Click" />
+                <Label x:Name="LblMinPerCent3" RenderTransformOrigin="0.215,0.577" Content="%" Margin="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="textBoxPerCent3" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" Height="20.939" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" IsEnabled="False" />
+                <Button x:Name="BtnMinPerCent3" Content="Data" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnMinPerCent3Click" />
+                <CheckBox x:Name="CheckboxPin3" Content="Pin" HorizontalAlignment="Left" Margin="8,7.606,0,7.466" VerticalContentAlignment="Center" RenderTransformOrigin="0.47,0.63" ToolTip="Gesperrt: Korrektur wird angepasst. Die Anzahl der Farben ändert sich nicht mehr!" VerticalAlignment="Center" />
+            </StackPanel>
+            <Image x:Name="ImagePalettePicture4" Stretch="Fill" Height="30" />
+            <StackPanel x:Name="StackPanelPalette4" Orientation="Horizontal" VerticalAlignment="Top">
+                <Label x:Name="LabelIndex4" Margin="0" RenderTransformOrigin="0.215,0.577" Content="Index 4" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <Label x:Name="LabelTargetIndex4" Margin="5,0,0,0" RenderTransformOrigin="0.215,0.577" Content="Zielindex:" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="TextBoxTargetIndex4" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Text="4" Margin="0,5.86" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Width="20" />
+                <Button x:Name="BtnOpenPalette4" Content="Öffne..." Height="25.96" Click="BtnOpenPalettes4Click" RenderTransformOrigin="1.314,0.319" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Margin="5,0,0,0" />
+                <Button x:Name="BtnClosePalette4" Content="Schließe" Height="25.96" Click="BtnClosePalettes4Click" RenderTransformOrigin="1.314,0.319" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Margin="5,4.52,0,4.52" />
+                <Label x:Name="LabelPath4" Margin="5,0,0,0" RenderTransformOrigin="0.215,0.577" Content="Dateiname 4" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel x:Name="StackPanelParts4" Margin="0" Orientation="Horizontal" VerticalAlignment="Top">
+                <Label x:Name="LblCorrection4" RenderTransformOrigin="0.215,0.577" Content="4: Korr." Margin="0" ToolTip="Korrektur um den Farbanteil der Palette am Imitation Bild zu ändern. Dieser WErt wird in der Projectseite gespeichert." VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center" />
+                <TextBox x:Name="textBoxCorrection4" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Button x:Name="BtnCorrection4" Content="OK" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnCorrection4Click" />
+                <Label x:Name="LabeColorCount4" RenderTransformOrigin="0.215,0.577" Content="Farben" Margin="0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                <TextBox x:Name="textBoxColorCount4" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <Button x:Name="BtnColors4" Content="OK" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnColors4Click" />
+                <Label x:Name="LblMinPerCent4" RenderTransformOrigin="0.215,0.577" Content="%" Margin="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                <TextBox x:Name="textBoxPerCent4" TextWrapping="Wrap" RenderTransformOrigin="0.416,-0.131" Width="60" Text="0" Margin="0" Height="20.939" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" IsEnabled="False" />
+                <Button x:Name="BtnMinPerCent4" Content="Data" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BtnMinPerCent4Click" />
+                <CheckBox x:Name="CheckboxPin4" Content="Pin" HorizontalAlignment="Left" Margin="8,7.606,0,7.466" VerticalContentAlignment="Center" RenderTransformOrigin="0.47,0.63" ToolTip="Gesperrt: Korrektur wird angepasst. Die Anzahl der Farben ändert sich nicht mehr!" VerticalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+        <Grid x:Name="GridSinus" Grid.ColumnSpan="3" Grid.Column="3" Margin="0,0,150,15" Grid.Row="6">
+            <GroupBox x:Name="GroupBoxSinus" Header="Sinusfunktion" Margin="0" />
+            <StackPanel x:Name="StackPanelSinus" Margin="10,20,10,10" RenderTransformOrigin="0.5,0.5">
+                <StackPanel.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform />
+                        <SkewTransform AngleY="0.055" />
+                        <RotateTransform />
+                        <TranslateTransform Y="-0.499" />
+                    </TransformGroup>
+                </StackPanel.RenderTransform>
+                <StackPanel x:Name="StackPanel0" Orientation="Horizontal" Margin="5,0">
+                    <CheckBox x:Name="CheckboxNoSinus" Content="Bild ohne Sinus" Height="19.927" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,20,2" VerticalContentAlignment="Center" d:LayoutOverrides="HorizontalAlignment" />
+                    <CheckBox x:Name="CheckboxX0" Content="x0:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" IsEnabled="False" />
+                    <TextBox x:Name="TextBoxX0" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" IsEnabled="False" />
+                    <CheckBox x:Name="CheckboxY0" Content="y0:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" IsEnabled="False" />
+                    <TextBox x:Name="TextBoxY0" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" IsEnabled="False" />
+                    <Label x:Name="LabelT0" Content="Periodendauer0:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" IsEnabled="False" />
+                    <TextBox x:Name="TextBoxFrequenz0" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" IsEnabled="False" Text="0" />
+                    <Label x:Name="LabelPhi0" Content="Phasenverschiebung0:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" IsEnabled="False" />
+                    <TextBox x:Name="TextBoxPhi0" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" IsEnabled="False" Text="0" />
+                    <Label x:Name="LabelAnteil0" Content="Anteil0:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxSinusProportion0" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Right" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                </StackPanel>
+                <StackPanel x:Name="StackPanel1" Orientation="Horizontal"  Margin="5,0">
+                    <CheckBox x:Name="CheckboxSinus1" Content="Sinusfunktion1" Height="19.927" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,20,2" VerticalContentAlignment="Center" d:LayoutOverrides="HorizontalAlignment" Width="{Binding ActualWidth, ElementName=CheckboxNoSinus}" />
+                    <CheckBox x:Name="CheckboxX1" Content="x1:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" />
+                    <TextBox x:Name="TextBoxX1" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                    <CheckBox x:Name="CheckboxY1" Content="y1:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" />
+                    <TextBox x:Name="TextBoxY1" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                    <Label x:Name="LabelT1" Content="Periodendauer1:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxFrequenz1" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" Text="0" />
+                    <Label x:Name="LabelPhi1" Content="Phasenverschiebung1:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxPhi1" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" Text="0" />
+                    <Label x:Name="LabelAnteil1" Content="Anteil1:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxSinusProportion1" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Right" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                </StackPanel>
+                <StackPanel x:Name="StackPanel2" Orientation="Horizontal"  Margin="5,0">
+                    <CheckBox x:Name="CheckboxSinus2" Content="Sinusfunktion2" Height="19.927" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,20,2" VerticalContentAlignment="Center" d:LayoutOverrides="HorizontalAlignment" Width="{Binding ActualWidth, ElementName=CheckboxNoSinus}" />
+                    <CheckBox x:Name="CheckboxX2" Content="x2:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" />
+                    <TextBox x:Name="TextBoxX2" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                    <CheckBox x:Name="CheckboxY2" Content="y2:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" />
+                    <TextBox x:Name="TextBoxY2" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                    <Label x:Name="LabelT2" Content="Periodendauer2:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxFrequenz2" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" Text="0" />
+                    <Label x:Name="LabelPhi2" Content="Phasenverschiebung2:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxPhi2" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" Text="0" />
+                    <Label x:Name="LabelAnteil2" Content="Anteil2:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxSinusProportion2" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Right" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                </StackPanel>
+                <StackPanel x:Name="StackPanel3" Orientation="Horizontal"  Margin="5,0">
+                    <CheckBox x:Name="CheckboxSinus3" Content="Sinusfunktion3" Height="19.927" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,20,2" VerticalContentAlignment="Center" d:LayoutOverrides="HorizontalAlignment" Width="{Binding ActualWidth, ElementName=CheckboxNoSinus}" />
+                    <CheckBox x:Name="CheckboxX3" Content="x3:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" />
+                    <TextBox x:Name="TextBoxX3" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                    <CheckBox x:Name="CheckboxY3" Content="y3:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" />
+                    <TextBox x:Name="TextBoxY3" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                    <Label x:Name="LabelT3" Content="Periodendauer3:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxFrequenz3" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" Text="0" />
+                    <Label x:Name="LabelPhi3" Content="Phasenverschiebung3:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxPhi3" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" Text="0" />
+                    <Label x:Name="LabelAnteil3" Content="Anteil3:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxSinusProportion3" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Right" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                </StackPanel>
+                <StackPanel x:Name="StackPanel4" Orientation="Horizontal"  Margin="5,0">
+                    <CheckBox x:Name="CheckboxSinus4" Content="Sinusfunktion4" Height="19.927" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,20,2" VerticalContentAlignment="Center" d:LayoutOverrides="HorizontalAlignment" Width="{Binding ActualWidth, ElementName=CheckboxNoSinus}" />
+                    <CheckBox x:Name="CheckboxX4" Content="x4:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" />
+                    <TextBox x:Name="TextBoxX4" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                    <CheckBox x:Name="CheckboxY4" Content="y4:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" />
+                    <TextBox x:Name="TextBoxY4" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                    <Label x:Name="LabelT4" Content="Periodendauer4:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxFrequenz4" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" Text="0" />
+                    <Label x:Name="LabelPhi4" Content="Phasenverschiebung4:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxPhi4" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" Text="0" />
+                    <Label x:Name="LabelAnteil4" Content="Anteil4:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxSinusProportion4" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Right" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                </StackPanel>
+                <StackPanel x:Name="StackPanel5" Orientation="Horizontal"  Margin="5,0">
+                    <CheckBox x:Name="CheckboxSinus5" Content="Sinusfunktion5" Height="19.927" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,20,2" VerticalContentAlignment="Center" d:LayoutOverrides="HorizontalAlignment" Width="{Binding ActualWidth, ElementName=CheckboxNoSinus}" />
+                    <CheckBox x:Name="CheckboxX5" Content="x5:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" />
+                    <TextBox x:Name="TextBoxX5" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" Background="White" />
+                    <CheckBox x:Name="CheckboxY5" Content="y5:" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,2,5,2" VerticalContentAlignment="Center" IsChecked="True" />
+                    <TextBox x:Name="TextBoxY5" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                    <Label x:Name="LabelT5" Content="Periodendauer5:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxFrequenz5" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" Text="0" />
+                    <Label x:Name="LabelPhi5" Content="Phasenverschiebung5:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxPhi5" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.926" HorizontalAlignment="Left" VerticalAlignment="Stretch" VerticalContentAlignment="Center" d:LayoutOverrides="Height" Text="0" />
+                    <Label x:Name="LabelAnteil5" Content="Anteil5:" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Height="31" />
+                    <TextBox x:Name="TextBoxSinusProportion5" TextWrapping="Wrap" Margin="0,2,20,2" Width="63.392" Height="19.928" HorizontalAlignment="Right" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Text="0" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="GridColorReducing" Grid.Column="1" Margin="0,0,0,15" Grid.Row="6">
+            <GroupBox x:Name="GroupBoxColorReducing" Header="Farbreduzierung" Margin="0" VerticalContentAlignment="Bottom" />
+            <StackPanel x:Name="StackPanelColorReducing" Margin="10,20,10,10" Orientation="Vertical">
+                <RadioButton x:Name="RadioButtonColorReduce64" Content="64 fach" HorizontalAlignment="Left" ForceCursor="True" IsChecked="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonColorReduce32" Content="32 fach" HorizontalAlignment="Left" ForceCursor="True" IsChecked="True" IsThreeState="True" Margin="5" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonColorReduce16" Content="16 fach" HorizontalAlignment="Left" ForceCursor="True" IsChecked="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonColorReduce8" Content="8 fach" HorizontalAlignment="Left" ForceCursor="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonColorReduce4" Content="4 fach" HorizontalAlignment="Left" ForceCursor="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonColorReduce2" Content="2 fach" HorizontalAlignment="Left" ForceCursor="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonColorReduceNone" Content="keine" HorizontalAlignment="Left" ForceCursor="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="GridlResizeWidth" Grid.Column="2" Margin="0,0,0,15" Grid.Row="6">
+            <GroupBox x:Name="GroupBoxResizeWidth" Header="Verkleinerung für Palette" Margin="0" VerticalContentAlignment="Bottom" IsEnabled="False" />
+            <StackPanel x:Name="StackPanelResizeWidth" Margin="10,20,10,10" Orientation="Vertical">
+                <RadioButton x:Name="RadioButtonResizeNone" Content="keine" HorizontalAlignment="Left" ForceCursor="True" IsChecked="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonResize1920" Content="Breite 1960" HorizontalAlignment="Left" ForceCursor="True" IsChecked="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonResize960" Content="Breite  960" HorizontalAlignment="Left" ForceCursor="True" IsChecked="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonResize480" Content="Breite 480" HorizontalAlignment="Left" ForceCursor="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+                <RadioButton x:Name="RadioButtonResize240" Content="Breite 240" HorizontalAlignment="Left" ForceCursor="True" IsThreeState="True" Margin="5" VerticalContentAlignment="Center" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

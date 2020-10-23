@@ -1,0 +1,70 @@
+﻿<Window x:Name="PalWin" x:Class="ColMusCa.Palette"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ColMusCa"
+        mc:Ignorable="d"
+        Title="Palette" Height="753.333" Width="960" Closed="PalWinClosed">
+    <Grid x:Name="PaletteGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="532*"/>
+            <RowDefinition Height="160"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="180*"/>
+            <ColumnDefinition Width="180"/>
+        </Grid.ColumnDefinitions>
+        <Menu x:Name="Menu1" Margin="0" Grid.ColumnSpan="4" Height="20">
+            <MenuItem x:Name="MenuFile" Header="Datei">
+                <MenuItem x:Name="MenuNew" Header="Neu" Click="MenuNewClick" Visibility="Hidden" />
+                <MenuItem x:Name="MenuOpen" Header="Öffnen" Click="MenuOpenClick" />
+                <MenuItem x:Name="MenuSave" Header="Speichern" Margin="0,0,19.16,0" Click="MenuSaveClick" Visibility="Hidden" />
+                <MenuItem x:Name="MenuSaveAs" Header="Speichern unter" Width="209.383" HorizontalAlignment="Left" Margin="0" Click="MenuSaveAsClick" />
+                <Separator />
+                <MenuItem x:Name="MenuExit" Header="Beenden" Width="209.383" HorizontalAlignment="Left" Margin="0" Click="MenuExitClick" />
+            </MenuItem>
+        </Menu>
+        <Image x:Name="ImageColor" Margin="0" Stretch="Fill" Grid.ColumnSpan="4" Grid.Row="1" />
+        <Button x:Name="BtnStartColor" Content="Startfarbe" Margin="0,10,0,0" Click="BtnStartColorClick" Grid.Row="2" Width="140" Height="40" VerticalAlignment="Top" />
+        <Button x:Name="BtnEndColor" Content="Endfarbe" Margin="0,10,0,0" Click="BtnEndColorClick" Grid.Column="3" Grid.Row="2" Width="140" Height="40" VerticalAlignment="Top" />
+        <Button x:Name="BtnPreview" Content="Vorschau" Height="40" Margin="0,10,0,0" Width="140" Click="BtnPreviewClick" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" />
+        <StackPanel x:Name="StackPanelStartfarbe" Orientation="Vertical" Grid.Row="2" d:LayoutOverrides="Height" Margin="15,0,0,0">
+            <Label x:Name="LblStartColor" Content="Startfarbe: FFFFFF" Margin="0,50,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" d:LayoutOverrides="LeftPosition, RightPosition" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <Label x:Name="LblStartFarbwert" Content="Farbwert HSV" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" d:LayoutOverrides="LeftPosition, RightPosition" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Label x:Name="LblStartHellwert" Content="Hellwert HSV" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Label x:Name="LblStartSaetigung" Content="Saettigung HSV" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        </StackPanel>
+        <StackPanel x:Name="StackPanel3D" Grid.Column="2" Margin="0,10,20,0" Orientation="Vertical" Grid.Row="2" HorizontalAlignment="Right" Width="229.191" VerticalAlignment="Top">
+            <StackPanel x:Name="StackPanelFarbwert" Margin="0" Orientation="Horizontal">
+                <Label x:Name="LblAnzahlFarbwertHSV" Content="Anzahl Farbwert HSV" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="125" />
+                <TextBox x:Name="TxtBoxAnzahlFarbwertHSV" TextWrapping="Wrap" Text="1" Margin="10,0,88,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
+            </StackPanel>
+            <StackPanel x:Name="StackPanelHellwert" Margin="0" Orientation="Horizontal">
+                <Label x:Name="LblAnzahlHellwertHSV" Content="Anzahl Hellwert HSV" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="125" />
+                <TextBox x:Name="TxtBoxAnzahlHellwertHSV" TextWrapping="Wrap" Text="1" Margin="10,0,88,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
+            </StackPanel>
+            <StackPanel x:Name="StackPanelSaetigung" Margin="0" Orientation="Horizontal">
+                <Label x:Name="LblAnzahlSaetigung" Content="Anzahl Sätigung HSV" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="125" />
+                <TextBox x:Name="TxtBoxAnzahSaetigung" TextWrapping="Wrap" Text="1" Margin="10,0,88,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
+            </StackPanel>
+            <StackPanel x:Name="StackPanelPixelCounter" Margin="0" Orientation="Horizontal">
+                <Label x:Name="LblPixelCounter" Content="Anzahl Farben" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Width="125" IsEnabled="{Binding IsChecked, ElementName=RadioBtnLinear}" />
+                <TextBox x:Name="TxtBoxPixelCounter" TextWrapping="Wrap" Text="1" Margin="10,0,88,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" IsEnabled="{Binding IsChecked, ElementName=RadioBtnLinear}" />
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Margin="10,10,0,0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <RadioButton x:Name="RadioBtnLinear" Content="Linerare Farben" IsChecked="True" Margin="0,5,0,0" Height="25" VerticalAlignment="Center" Checked="RadioBtnLinearChecked"/>
+            <RadioButton x:Name="RadioBtn3D" Content="3 dimensionale Farben" Margin="0" VerticalAlignment="Center" Checked="RadioBtn3DChecked"/>
+        </StackPanel>
+        <StackPanel x:Name="StackPanelEndfarbe" Orientation="Vertical" Grid.Row="2" Margin="15,0,0,0" d:LayoutOverrides="Height" Grid.Column="3">
+            <Label x:Name="LblEndColor" Content="Endfarbe: FFFFFF" Margin="0,50,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" d:LayoutOverrides="LeftPosition, RightPosition" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <Label x:Name="LblEndFarbwert" Content="Farbwert HSV" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" d:LayoutOverrides="LeftPosition, RightPosition" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Label x:Name="LblEndHellwert" Content="Hellwert HSV" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Label x:Name="LblEndSaetigung" Content="Saettigung HSV" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        </StackPanel>
+    </Grid>
+</Window>
