@@ -2929,8 +2929,6 @@ namespace ColMusCa
             ProjPage.CheckboxPin3 = CheckboxPin3.IsChecked;
             ProjPage.CheckboxPin4 = CheckboxPin4.IsChecked;
             ProjPage.CheckboxNoSinus = CheckboxNoSinus.IsChecked;
-            ProjPage.CheckboxPageCalculate = CheckboxPageCalculate.IsChecked;
-            ProjPage.CheckboxPageInfoData = CheckboxPageInfoData.IsChecked;
             ProjPage.CheckboxSinus0 = CheckboxNoSinus.IsChecked;
             ProjPage.CheckboxSinus1 = CheckboxSinus1.IsChecked;
             ProjPage.CheckboxSinus2 = CheckboxSinus2.IsChecked;
@@ -3579,7 +3577,6 @@ namespace ColMusCa
 
         private void OpenFilePalette(object sender, RoutedEventArgs e)
         {
-            
             // Palette Window
             PalWin = new Palette();
             PalWin.Show();
@@ -3605,7 +3602,6 @@ namespace ColMusCa
             ProjectSave();
 
             WindowMain.Title = PROJ_NAME + " " + Proj.Name;
-            GroupBoxPage.Header = "Seite " + Proj.PageIndex + " von " + (Proj.PageCounter - 1);
             ProjectPageOpen();
             ProjectPageSave();
         }
@@ -3642,17 +3638,25 @@ namespace ColMusCa
                 {
                     Proj.PathName = Proj.PathName + arrayPath[i] + "\\";
                 }
-                Proj.Name = dlg.FileName;
+                // Proj.Name = dlg.FileName;
+
+                arrayPath = Proj.Name.Split('.');
+                for (int i = 0; i < arrayPath.Length - 1; ++i)
+                {
+                    Proj.PathName = arrayPath[i] + "\\";
+                }
 
                 //creath the projects-path
                 try
                 {
                     // Try to create the directory.
+                    Directory.CreateDirectory(Proj.PathName);
                     Directory.CreateDirectory(Proj.PathName + PATH_ORIGINAL);
                     Directory.CreateDirectory(Proj.PathName + PATH_IMITATION);
                     Directory.CreateDirectory(Proj.PathName + PATH_PALETTES);
                     Directory.CreateDirectory(Proj.PathName + PATH_PROJ_PAGES);
                     Directory.CreateDirectory(Proj.PathName + PATH_DATA_GRID);
+                    Proj.Name = Proj.PathName;
                 }
                 catch (Exception)
                 {
@@ -3732,21 +3736,25 @@ namespace ColMusCa
                 file.Close();
             }
 
-            //creath the projects-path
-            try
+            var strin0 = string.IsNullOrEmpty(Proj.PathName);
+            if (!string.IsNullOrEmpty(Proj.PathName))
             {
-                // Try to create the directory.
-                Directory.CreateDirectory(Proj.PathName + PATH_ORIGINAL);
-                Directory.CreateDirectory(Proj.PathName + PATH_IMITATION);
-                Directory.CreateDirectory(Proj.PathName + PATH_PALETTES);
-                Directory.CreateDirectory(Proj.PathName + PATH_PROJ_PAGES);
-                Directory.CreateDirectory(Proj.PathName + PATH_DATA_GRID);
+                //creath the projects-path
+                try
+                {
+                    // Try to create the directory.
+                    Directory.CreateDirectory(Proj.PathName + PATH_ORIGINAL);
+                    Directory.CreateDirectory(Proj.PathName + PATH_IMITATION);
+                    Directory.CreateDirectory(Proj.PathName + PATH_PALETTES);
+                    Directory.CreateDirectory(Proj.PathName + PATH_PROJ_PAGES);
+                    Directory.CreateDirectory(Proj.PathName + PATH_DATA_GRID);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Direktory create failed");
+                }
+                finally { }
             }
-            catch (Exception)
-            {
-                MessageBox.Show("Direktory create failed");
-            }
-            finally { }
         }
 
         private void ProjectPageSave()
@@ -3803,16 +3811,7 @@ namespace ColMusCa
             {
                 ProjPage.CheckboxPageCalculate = false;
             }
-            CheckboxPageCalculate.IsChecked = ProjPage.CheckboxPageCalculate;
-            if (ProjPage.CheckboxPageInfoData == null)
-            {
-                ProjPage.CheckboxPageInfoData = false;
-            }
-            CheckboxPageInfoData.IsChecked = ProjPage.CheckboxPageInfoData;
-            if (ProjPage.CheckboxSinus0 == null)
-            {
-                ProjPage.CheckboxSinus0 = false;
-            }
+
             CheckboxNoSinus.IsChecked = ProjPage.CheckboxSinus0;
             if (ProjPage.CheckboxSinus1 == null)
             {
@@ -4406,7 +4405,6 @@ namespace ColMusCa
             // MenuItemDateiFarbpaletten.IsEnabled = enable;
             // MenueOpenFilePalette.IsEnabled = enable;
             GridUp.IsEnabled = enable;
-            GridPage.IsEnabled = enable;
             GridCalc.IsEnabled = enable;
             StackPanelPalette.IsEnabled = enable;
             GridSinus.IsEnabled = enable;
@@ -4426,6 +4424,7 @@ namespace ColMusCa
             string version = AssemblyVersion;
             MessageBox.Show(version, "Version");
         }
+
         public string AssemblyVersion
         {
             get
